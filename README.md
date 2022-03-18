@@ -9,3 +9,6 @@
 <hr />
 
 This repo holds code for the AI model and is written in Python using the TensorFlow library.
+
+[Front End](https://github.com/Ernulphus/capstone-Bsharp-app)  
+[Back End](https://github.com/Ernulphus/capstone-Bsharp-server)
