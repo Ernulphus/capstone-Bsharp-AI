@@ -1,13 +1,25 @@
+#!/usr/bin/env python
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+chrome_options = Options()
+chrome_options.add_argument("--headless") # Run in headless mode
+# StackOverflow said this configuration would fix an error I'm getting on Linux:
+chrome_options.add_argument("no-sandbox")
+chrome_options.add_argument("--disable-extensions")
+chrome_options.add_argument("--disable-dev-shm-usage")
 from PIL import Image
 import requests
 import io
 import time
 
 #setting up the path for web driver find the executable
-path = "/Users/boaz/Documents/Semester8/capstone/chromedriver"
-wd = webdriver.Chrome(path)
+path = "/root/chromedriver"
+wd = webdriver.Chrome(path, options=chrome_options)
+
+# Set up instrument type to save it as and the url for that google search
+instrument_type = "trumpet"
+url = "https://www.google.com/search?q=trumpet&client=ubuntu&hs=emy&channel=fs&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjAzezpkLj3AhXihIkEHTFLBRoQ_AUoAnoECAIQBA&biw=1308&bih=871#imgrc=TRWdXiBk6_Ya2M"
 
 #writing a function to get images from the webpage before we download them
 def get_images(wd, delay, max_images):
@@ -20,7 +32,6 @@ def get_images(wd, delay, max_images):
         time.sleep(delay)
 
     #getting our specified webpage
-    url = "https://www.google.com/search?q=guitar&source=lnms&tbm=isch&sa=X&ved=2ahUKEwiEhf6XtvP2AhUMlIkEHctKAUcQ_AUoAnoECAMQBA&biw=1440&bih=726&dpr=1#imgrc=cjBFZlfYH3F-_M"
     wd.get(url)
 
     #making sure we don't have duplicate urls using the set function
@@ -87,12 +98,12 @@ def download_image(download_path, url, file_name):
 
     print("Success")
 
-urls = get_images(wd, 1, 6)
+urls = get_images(wd, 0, 1000)
 
 #looping through the different urls we have
 for i, url in enumerate(urls):
     #downloading to the instrument_images folder with the .jpg format
-    download_image("music_instruments_images/", url, str(i) + ".jpg")
+    download_image("music_instruments_images/",instrument_type, url, str(i) + ".jpg")
 
 #closing the chrome window so we don't have a bunch webpages open was we are done downloading the images
 wd.quit()
