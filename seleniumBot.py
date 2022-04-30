@@ -19,7 +19,7 @@ wd = webdriver.Chrome(path, options=chrome_options)
 
 # Set up instrument type to save it as and the url for that google search
 instrument_type = "Trumpet" # First letter capitalized, singular (except Bagpipes)
-url = "https://www.google.com/search?q=trumpet&client=ubuntu&hs=emy&channel=fs&source=lnms&tbm=isch&sa=X&ved=2ahUKEwjAzezpkLj3AhXihIkEHTFLBRoQ_AUoAnoECAIQBA&biw=1308&bih=871#imgrc=TRWdXiBk6_Ya2M"
+url = "https://www.google.com/search?q=trumpet+art&tbm=isch&ved=2ahUKEwjZ5OXM9rn3AhVbM1kFHYJqAAsQ2-cCegQIABAA&oq=trumpet+art&gs_lcp=CgNpbWcQAzIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgYIABAFEB4yBggAEAUQHjoECAAQQzoHCAAQsQMQQzoICAAQgAQQsQM6CwgAEIAEELEDEIMBOgoIABCxAxCDARBDUMsZWOwjYNkkaABwAHgAgAFciAGbBZIBAjEymAEAoAEBqgELZ3dzLXdpei1pbWfAAQE&sclient=img&ei=tzFsYpmtC9vm5NoPgtWBWA&bih=859&biw=1850&client=ubuntu&hs=emy&hl=en-US"
 
 #writing a function to get images from the webpage before we download them
 def get_images(wd, delay, max_images):
@@ -62,7 +62,7 @@ def get_images(wd, delay, max_images):
             images = wd.find_elements(By.CLASS_NAME, "n3VNCb")
             for i in images:
                 if i.get_attribute('src') in image_urls:
-                    max_images += 1
+                    # max_images += 1
                     skips += 1
                     break
 
@@ -71,6 +71,19 @@ def get_images(wd, delay, max_images):
                     #add the proper image with a valid link to image_urls
                     image_urls.add(i.get_attribute('src'))
                     print(f"found {len(image_urls)}")
+        
+        # Check if we've reached the end
+        try:
+            wd.find_element(by=By.XPATH, value="// a[contains(text().\'you've reached the end')]")
+            break
+        except:
+            continue
+
+        # Check if we need to load more images
+        try: 
+            wd.find_element(by=By.XPATH, value="// a[contains(text().\'Show more results')]").click()
+        except:
+            continue
 
     return image_urls
 
@@ -98,7 +111,7 @@ def download_image(download_path, url, file_name):
 
     print("Success")
 
-urls = get_images(wd, 0, 10) # Get images using wd, 2nd param is delay, 3rd is number of images to get
+urls = get_images(wd, 0, 297) # Get images using wd, 2nd param is delay, 3rd is number of images to get
 
 #looping through the different urls we have
 for i, url in enumerate(urls):
