@@ -12,6 +12,7 @@ from PIL import Image
 import requests
 import io
 import time
+import datetime
 
 #setting up the path for web driver find the executable
 path = "/root/chromedriver"
@@ -111,12 +112,12 @@ def download_image(download_path, url, file_name):
 
     print("Success")
 
-urls = get_images(wd, 0, 297) # Get images using wd, 2nd param is delay, 3rd is number of images to get
+urls = get_images(wd, 0, 300) # Get images using wd, 2nd param is delay, 3rd is number of images to get
 
 #looping through the different urls we have
 for i, url in enumerate(urls):
-    #downloading to the instrument_images folder with the .jpg format
-    download_image("music_instruments_images/Brass/" + instrument_type+"/", url, instrument_type + str(i) + ".jpg")
+    #downloading to the instrument_images folder with the .jpg format and date in ms
+    download_image("music_instruments_images/Brass/" + instrument_type+"/", url, instrument_type + datetime.datetime.now().strftime("%f") + ".jpg")
 
 #closing the chrome window so we don't have a bunch webpages open was we are done downloading the images
 wd.quit()
