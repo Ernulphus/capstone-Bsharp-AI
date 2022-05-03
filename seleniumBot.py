@@ -13,13 +13,16 @@ import requests
 import io
 import time
 import datetime
+import sys
 #setting up the path for web driver find the executable
 path = "/root/chromedriver"
 wd = webdriver.Chrome(path, options=chrome_options)
 
 # Set up instrument type to save it as and the url for that google search
-instrument_type = "Trumpet" # First letter capitalized, singular (except Bagpipes)
-url = "https://www.google.com/search?q=hispanic+people+playing+trumpet&tbm=isch&ved=2ahUKEwjumbXNycP3AhWtL1kFHSa_DBwQ2-cCegQIABAA&oq=hispanic+people+playing+trumpet&gs_lcp=CgNpbWcQAzoECAAQQ1CTA1j9GGCVPGgAcAB4AIAB6gKIAdMPkgEHNC4zLjQuMZgBAKABAaoBC2d3cy13aXotaW1nwAEB&sclient=img&ei=tkBxYu7mEK3f5NoPpv6y4AE&bih=673&biw=1200"
+instrument_type = "FrenchHorn" # First letter capitalized, singular (except Bagpipes)
+
+url = str(sys.argv[1])
+
 #writing a function to get images from the webpage before we download them
 def get_images(wd, delay, max_images):
 
