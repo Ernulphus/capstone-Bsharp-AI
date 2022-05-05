@@ -28,7 +28,7 @@ import pickle
 # Setting up the Model
 """
 
-instruments_data = tf.keras.utils.image_dataset_from_directory('/Users/jonachen/Desktop/ML_Model/Model/Training', labels= 'inferred',batch_size= None)
+instruments_data = tf.keras.utils.image_dataset_from_directory('/root/capstone-Bsharp-AI/music_instruments_images/Brass', labels= 'inferred',batch_size= None)
 #print(list(instruments_data.as_numpy_iterator()))
 #print(type(instruments_data))
 train_images, train_labels = tuple(zip(*instruments_data))
@@ -43,7 +43,7 @@ train_images = train_images/255.0
 class_names = ['accordion','alphorn','bagpipes']
 
 # validation data#
-validation_data = tf.keras.utils.image_dataset_from_directory('/Users/jonachen/Desktop/ML_Model/Model/Validation', labels= 'inferred', batch_size= None)
+validation_data = tf.keras.utils.image_dataset_from_directory('/root/capstone-Bsharp-AI/validation_images', labels= 'inferred', batch_size= None)
 val_images, val_labels = tuple(zip(*validation_data))
 
 # validation images are the images to test the model on 
