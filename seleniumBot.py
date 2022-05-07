@@ -113,7 +113,7 @@ def download_image(download_path, url, file_name):
 
     print("Success")
 
-urls = get_images(wd, 0, 100) # Get images using wd, 2nd param is delay, 3rd is number of images to get
+urls = get_images(wd, 0, 10) # Get images using wd, 2nd param is delay, 3rd is number of images to get
 
 #looping through the different urls we have
 for i, url in enumerate(urls):
