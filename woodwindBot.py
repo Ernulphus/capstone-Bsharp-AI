@@ -19,7 +19,7 @@ path = "/root/chromedriver"
 wd = webdriver.Chrome(path, options=chrome_options)
 
 # Set up instrument type to save it as and the url for that google search
-instrument_type = "Flute" # First letter capitalized, singular (except Bagpipes)
+instrument_type = "Saxophone" # First letter capitalized, singular (except Bagpipes)
 
 url = str(sys.argv[1])
 
