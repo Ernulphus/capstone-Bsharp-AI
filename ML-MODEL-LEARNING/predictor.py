@@ -78,7 +78,7 @@ max_value = max(predict_list)
 
 max_index = predict_list.index(max_value)
 
-print(instrumentList[max_index])
+print(instrumentList[max_index], end='')
 
 
 
