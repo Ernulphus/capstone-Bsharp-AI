@@ -19,7 +19,7 @@ path = "/root/chromedriver"
 wd = webdriver.Chrome(path, options=chrome_options)
 
 # Set up instrument type to save it as and the url for that google search
-instrument_type = "FrenchHorn" # First letter capitalized, singular (except Bagpipes)
+instrument_type = "Conga" # First letter capitalized, singular (except Bagpipes)
 
 url = str(sys.argv[1])
 
@@ -113,12 +113,12 @@ def download_image(download_path, url, file_name):
 
     print("Success")
 
-urls = get_images(wd, 0, 250) # Get images using wd, 2nd param is delay, 3rd is number of images to get
+urls = get_images(wd, 0, 300) # Get images using wd, 2nd param is delay, 3rd is number of images to get
 
 #looping through the different urls we have
 for i, url in enumerate(urls):
     #downloading to the instrument_images folder with the .jpg format and date in ms
-    download_image("music_instruments_images/Brass/" + instrument_type+"/", url, instrument_type + datetime.datetime.now().strftime("%f") + ".jpg")
+    download_image("music_instruments_images/Percussion/" + instrument_type+"/", url, instrument_type + datetime.datetime.now().strftime("%f") + ".jpg")
 
 #closing the chrome window so we don't have a bunch webpages open was we are done downloading the images
 wd.quit()
