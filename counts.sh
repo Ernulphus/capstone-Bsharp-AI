@@ -1,6 +1,6 @@
 #!/bin/bash
 #Script to count the number of images we have
- 
+
 echo -n "Brass"
 echo " "
 echo -n "Trumpet "
@@ -48,3 +48,5 @@ ls music_instruments_images/Strings/Harp | wc -l
 echo -n "Violin "
 ls music_instruments_images/Strings/Violin | wc -l
 
+echo -n "Total "
+find music_instruments_images/ -type f | wc -l
