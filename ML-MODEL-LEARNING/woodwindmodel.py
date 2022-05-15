@@ -31,7 +31,9 @@ from PIL import Image
 
 print('Starting to get dataset')
 
-instruments_data = tf.keras.utils.image_dataset_from_directory('/home/kaufmux/Documents/capstone/capstone-Bsharp-AI/music_instruments_images/Woodwind/', labels= 'inferred', batch_size=1, image_size=(128, 128))
+width = 100
+
+instruments_data = tf.keras.utils.image_dataset_from_directory('/home/kaufmux/Documents/capstone/capstone-Bsharp-AI/music_instruments_images/Woodwind/', labels= 'inferred', batch_size=1, image_size=(width, width))
 
 print('Done getting dataset')
 
@@ -42,31 +44,33 @@ train_images, train_labels = tuple(zip(*instruments_data))
 print('Done setting images and labels')
 #print('tuple length: ', len(train_images))
 
+
+
 train_images = np.array(train_images)
 train_labels = np.array(train_labels)
-train_images = np.resize(train_images, (1027, 128, 128, 3))
+train_images = np.resize(train_images, (7122, width, width, 3))
 print('Done setting images/labels as numpy arrays')
-print('ndim, shape, size: ', train_labels.ndim, train_labels.shape, train_labels.size)
+print('ndim, shape, size: ', train_images.ndim, train_images.shape, train_images.size)
 
-print('Flattening...')
+print('Scaling...')
 train_images = train_images/255.0
-print('Flattened')
+print('Scaled')
 
 class_names = ['Bagpipes','Clarinet','Flute','Saxophone']
 
 # validation data#
 print('Fetching validation images...')
-validation_data = tf.keras.utils.image_dataset_from_directory('/home/kaufmux/Documents/capstone/capstone-Bsharp-AI/validation_images/Woodwind/', labels= 'inferred', batch_size=1, image_size=(128,128))
+validation_data = tf.keras.utils.image_dataset_from_directory('/home/kaufmux/Documents/capstone/capstone-Bsharp-AI/validation_images/Woodwind/', labels= 'inferred', batch_size=1, image_size=(width, width))
 val_images, val_labels = tuple(zip(*validation_data))
 
 # validation images are the images to test the model on
 val_images = np.array(val_images)
 val_labels = np.array(val_labels)
-val_images = np.resize(val_images, (1125, 128, 128, 3))
+val_images = np.resize(val_images, (1125, width, width, 3))
 
 print('Scaling validation images...')
 val_images = val_images/255.0
-print('Scaling')
+print('Scaled')
 
 IMG_INDEX = 150
 # plt.imshow(train_images[IMG_INDEX], cmap=plt.cm.binary)
@@ -80,7 +84,7 @@ tf.keras.backend.clear_session()
 model = models.Sequential()
 # 32 is the amount of filters, (3, 3) is how large the filters are. the activation is what is being applied to the output of the matrix
 # input shape is what the program should expect (128 by 128, 3 colors [RGB])
-model.add(layers.Conv2D(32,(3,3), activation = 'relu', input_shape =(128,128,3))) # Adding the 1 here to match inputs (?)
+model.add(layers.Conv2D(32,(3,3), activation = 'relu', input_shape =(width,width,3))) # Adding the 1 here to match inputs (?)
 
 # pooling will shrink the filter size by a factor of 2, with the stride length being 2
 model.add(layers.MaxPooling2D((2,2)))
