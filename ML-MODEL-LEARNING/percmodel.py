@@ -36,14 +36,14 @@ instruments_data = tf.keras.utils.image_dataset_from_directory(
 train_images, train_labels = tuple(zip(*instruments_data))
 
 train_images = np.array(train_images)
-train_images = np.resize(train_images, (52368, 128, 128, 3))
+train_images = np.resize(train_images, (train_images.shape[0], 128, 128, 3))
 train_labels = np.array(train_labels)
 print(train_images)
 print(train_labels)
 
 train_images = train_images / 255.0
 
-class_names = ['Trumpet', 'Tuba', 'Trombone', 'FrenchHorn']
+class_names = ['BassDrum', 'Conga', 'Piano', 'SnareDrum']
 
 # validation data#
 validation_data = tf.keras.utils.image_dataset_from_directory(r'C:\Users\alima\AppData\Local\Packages'
@@ -55,7 +55,7 @@ val_images, val_labels = tuple(zip(*validation_data))
 
 # validation images are the images to test the model on 
 val_images = np.array(val_images)
-val_images = np.resize(val_images, (2000, 128, 128, 3))
+val_images = np.resize(val_images, (val_images.shape[0], 128, 128, 3))
 val_labels = np.array(val_labels)
 
 print(val_images)
@@ -92,4 +92,7 @@ model.compile(optimizer='adam',
               metrics=['accuracy'])
 history = model.fit(train_images, train_labels, epochs=5, validation_data=(val_images, val_labels))
 
-pickle.dump(model, open('stringmodel.pkl', 'wb'))
+temp = open("percmodel.pkl", "wb")
+
+with open("percmodel.pkl", "wb") as temp:
+    pickle.dump(model, temp)
