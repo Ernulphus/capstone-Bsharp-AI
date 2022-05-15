@@ -11,7 +11,7 @@ Original file is located at
 # %tensorflow_version 2.x
 import tensorflow as tf
 
-from tensorflow.keras import datasets, layers, models
+from tensorflow.keras import datasets, layers, models, backend
 import tensorflow_datasets as tfds
 import matplotlib.pyplot as plt
 from keras.preprocessing.image import load_img
@@ -31,7 +31,7 @@ from PIL import Image
 
 print('Starting to get dataset')
 
-instruments_data = tf.keras.utils.image_dataset_from_directory('/home/kaufmux/Documents/capstone/capstone-Bsharp-AI/music_instruments_images/Woodwind/', labels= 'inferred', batch_size=1)
+instruments_data = tf.keras.utils.image_dataset_from_directory('/home/kaufmux/Documents/capstone/capstone-Bsharp-AI/music_instruments_images/Woodwind/', labels= 'inferred', batch_size=1, image_size=(128, 128))
 
 print('Done getting dataset')
 
@@ -44,28 +44,29 @@ print('Done setting images and labels')
 
 train_images = np.array(train_images)
 train_labels = np.array(train_labels)
-train_images = np.resize(train_images, (1027, 256, 256, 3))
+train_images = np.resize(train_images, (1027, 128, 128, 3))
 print('Done setting images/labels as numpy arrays')
 print('ndim, shape, size: ', train_labels.ndim, train_labels.shape, train_labels.size)
 
 print('Flattening...')
-train_images = train_images/256.0
+train_images = train_images/255.0
 print('Flattened')
 
 class_names = ['Bagpipes','Clarinet','Flute','Saxophone']
 
 # validation data#
 print('Fetching validation images...')
-validation_data = tf.keras.utils.image_dataset_from_directory('/home/kaufmux/Documents/capstone/capstone-Bsharp-AI/validation_images/Woodwind/', labels= 'inferred', batch_size=1)
+validation_data = tf.keras.utils.image_dataset_from_directory('/home/kaufmux/Documents/capstone/capstone-Bsharp-AI/validation_images/Woodwind/', labels= 'inferred', batch_size=1, image_size=(128,128))
 val_images, val_labels = tuple(zip(*validation_data))
 
 # validation images are the images to test the model on
 val_images = np.array(val_images)
 val_labels = np.array(val_labels)
+val_images = np.resize(val_images, (1125, 128, 128, 3))
 
-print('Flattening validation images...')
-val_images = val_images/256.0
-print('Flattened')
+print('Scaling validation images...')
+val_images = val_images/255.0
+print('Scaling')
 
 IMG_INDEX = 150
 # plt.imshow(train_images[IMG_INDEX], cmap=plt.cm.binary)
@@ -74,10 +75,12 @@ IMG_INDEX = 150
 
 """POOLING AND CONVOLUTION"""
 
+tf.keras.backend.clear_session()
+
 model = models.Sequential()
 # 32 is the amount of filters, (3, 3) is how large the filters are. the activation is what is being applied to the output of the matrix
-# input shape is what the program should expect (32 by 32, 3 colors [RGB])
-model.add(layers.Conv2D(32,(3,3), activation = 'relu', input_shape =(256,256,3))) # Adding the 1 here to match inputs (?)
+# input shape is what the program should expect (128 by 128, 3 colors [RGB])
+model.add(layers.Conv2D(32,(3,3), activation = 'relu', input_shape =(128,128,3))) # Adding the 1 here to match inputs (?)
 
 # pooling will shrink the filter size by a factor of 2, with the stride length being 2
 model.add(layers.MaxPooling2D((2,2)))
@@ -85,12 +88,15 @@ model.add(layers.Conv2D(64,(3,3), activation = 'relu'))
 model.add(layers.MaxPooling2D((2,2)))
 model.add(layers.Conv2D(64,(3,3), activation = 'relu'))
 #FLATTENING THE LAYERS
-# when we flatten these layers, we are basically putting one on top of the other
+# when we flatten the data, we are reshaping them into a single vector
 model.add(layers.Flatten())
 # 64 is for 64 filters
 model.add(layers.Dense(64, activation = 'relu'))
-# 10 for 10 classes
+# 5 for 5 classes
 model.add(layers.Dense(5))
+
+model.summary() # Print model layers
+
 #TRAINING
 
 # training portion of the code
@@ -116,4 +122,4 @@ history = model.fit(train_images, train_labels, epochs=4, validation_data = (val
 #print(pred_images.shape)
 
 #print(model.predict_on_batch(pred_images))
-pickle.dump(model, open('woodwindmodel.pkl'),'wb')
+pickle.dump(model, open('woodwindmodel.pkl','wb'))
