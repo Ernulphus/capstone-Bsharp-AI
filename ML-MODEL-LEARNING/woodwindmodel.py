@@ -29,33 +29,39 @@ from PIL import Image
 # Setting up the Model
 """
 
-instruments_data = tf.keras.utils.image_dataset_from_directory('/home/kaufmux/Documents/capstone/capstone-Bsharp-AI/music_instruments_images/Woodwind/', labels= 'inferred')
+print('Starting to get dataset')
+
+instruments_data = tf.keras.utils.image_dataset_from_directory('/home/kaufmux/Documents/capstone/capstone-Bsharp-AI/music_instruments_images/Woodwind/', labels= 'inferred', batch_size=1)
+
+print('Done getting dataset')
+
 #print(list(instruments_data.as_numpy_iterator()))
 
 #print(type(instruments_data))
-train_images, train_labels =tuple(zip(*instruments_data))
+train_images, train_labels = tuple(zip(*instruments_data))
+print('Done setting images and labels')
 
 train_images = np.array(train_images)
 train_labels = np.array(train_labels)
-print(train_images)
-print(train_labels)
+print('Done setting images/labels as arrays')
 
-train_images = train_images/255.0
-#print(images.shape)
+print('Flattening...')
+train_images = train_images/256.0
+print('Flattened')
+
 class_names = ['Bagpipes','Clarinet','Flute','Saxophone']
 
 # validation data#
-validation_data = tf.keras.utils.image_dataset_from_directory('/home/kaufmux/Documents/capstone/capstone-Bsharp-AI/validation_images/Woodwind/', labels= 'inferred', batch_size= None)
+print('Fetching validation images...')
+validation_data = tf.keras.utils.image_dataset_from_directory('/home/kaufmux/Documents/capstone/capstone-Bsharp-AI/validation_images/Woodwind/', labels= 'inferred', batch_size=1)
 val_images, val_labels = tuple(zip(*validation_data))
 
 # validation images are the images to test the model on
 val_images = np.array(val_images)
 val_labels = np.array(val_labels)
 
-print(val_images)
-print(val_labels)
-#print(val_images.shape)
-val_images = val_images/255.0
+print('Resizing validation images...')
+val_images = val_images/256.0
 
 IMG_INDEX = 150
 plt.imshow(train_images[IMG_INDEX], cmap=plt.cm.binary)
