@@ -30,32 +30,32 @@ from PIL import Image
 
 instruments_data = tf.keras.utils.image_dataset_from_directory(
     r'C:\Users\alima\AppData\Local\Packages\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc\LocalState\rootfs\home'
-    r'\mashroor\capstone-Bsharp-AI\music_instruments_images\Strings', labels='inferred', batch_size=1,
+    r'\mashroor\capstone-Bsharp-AI\music_instruments_images\Percussion', labels='inferred', batch_size=1,
     image_size=(128, 128))
 
 train_images, train_labels = tuple(zip(*instruments_data))
 
 train_images = np.array(train_images)
-train_images = np.resize(train_images, (train_images.shape[0], 128, 128, 3))
+train_images = np.resize(train_images, (52368, 128, 128, 3))
 train_labels = np.array(train_labels)
 print(train_images)
 print(train_labels)
 
 train_images = train_images / 255.0
 
-class_names = ['Banjo', 'Guitar', 'Harp', 'Violin']
+class_names = ['Trumpet', 'Tuba', 'Trombone', 'FrenchHorn']
 
 # validation data#
 validation_data = tf.keras.utils.image_dataset_from_directory(r'C:\Users\alima\AppData\Local\Packages'
                                                               r'\CanonicalGroupLimited.UbuntuonWindows_79rhkp1fndgsc'
                                                               r'\LocalState\rootfs\home\mashroor\capstone-Bsharp-AI'
-                                                              r'\validation_images\Strings',
+                                                              r'\validation_images\Percussion',
                                                               labels='inferred', batch_size=1, image_size=(128, 128))
 val_images, val_labels = tuple(zip(*validation_data))
 
 # validation images are the images to test the model on 
 val_images = np.array(val_images)
-val_images = np.resize(val_images, (val_images.shape[0], 128, 128, 3))
+val_images = np.resize(val_images, (2000, 128, 128, 3))
 val_labels = np.array(val_labels)
 
 print(val_images)
