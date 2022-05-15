@@ -9,12 +9,18 @@ from PIL import Image
 import pickle
 import sys
 
-instrumentList = ['FrenchHorn','Trombone','Trumpet','Tuba']
-model = pickle.load(open('/root/capstone-Bsharp-AI/ML-MODEL-LEARNING/model.pkl','rb'))
+familyList = ['Brass', 'Woodwind', 'Percussion', 'Strings']
+instList = ['FrenchHorn','Trombone','Trumpet','Tuba']
+woodList = ['Bagpipes', 'Clarinet', 'Flute', 'Saxophone']
+percList = ['BassDrum', 'Conga', 'Piano', 'SnareDrum']
+stringList = ['Banjo', 'Guitar', 'Harp', 'Violin']
+
+# Load root model first
+model = pickle.load(open('/root/capstone-Bsharp-AI/ML-MODEL-LEARNING/rootmodel.pkl','rb'))
 
 file_path = sys.argv[1] 
 img = Image.open(file_path)
-newsize = (256,256)
+newsize = (128,128)
 img = img.resize(newsize)
 
 prediction_img = tf.keras.utils.img_to_array(
@@ -38,4 +44,31 @@ max_value = max(predict_list)
 
 max_index = predict_list.index(max_value)
 
-print(instrumentList[max_index], end='')
+family = familyList[max_index]
+
+# Load the correct new model
+match family:
+    case 'Brass':
+        model = pickle.load(open('/root/capstone-Bsharp-AI/ML-MODEL-LEARNING/brassmodel.pkl','rb'))
+    case 'Woodwind':
+        model = pickle.load(open('/root/capstone-Bsharp-AI/ML-MODEL-LEARNING/woodwindmodel.pkl','rb'))
+        instList = woodList
+    case 'Percussion':
+        model = pickle.load(open('/root/capstone-Bsharp-AI/ML-MODEL-LEARNING/percmodel.pkl','rb'))
+        instList = percList
+    case 'Strings':
+        model = pickle.load(open('/root/capstone-Bsharp-AI/ML-MODEL-LEARNING/stringmodel.pkl','rb'))
+        instList = stringList
+
+
+predict_arr = model.predict_on_batch(pred_image)
+
+predict_list = predict_arr[0].tolist()
+
+#print(predict_list)
+
+max_value = max(predict_list)
+
+max_index = predict_list.index(max_value)
+
+guess = instList[max_index]
