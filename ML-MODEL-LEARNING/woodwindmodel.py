@@ -40,10 +40,13 @@ print('Done getting dataset')
 #print(type(instruments_data))
 train_images, train_labels = tuple(zip(*instruments_data))
 print('Done setting images and labels')
+#print('tuple length: ', len(train_images))
 
 train_images = np.array(train_images)
 train_labels = np.array(train_labels)
-print('Done setting images/labels as arrays')
+train_images = np.resize(train_images, (1027, 256, 256, 3))
+print('Done setting images/labels as numpy arrays')
+print('ndim, shape, size: ', train_labels.ndim, train_labels.shape, train_labels.size)
 
 print('Flattening...')
 train_images = train_images/256.0
@@ -60,20 +63,21 @@ val_images, val_labels = tuple(zip(*validation_data))
 val_images = np.array(val_images)
 val_labels = np.array(val_labels)
 
-print('Resizing validation images...')
+print('Flattening validation images...')
 val_images = val_images/256.0
+print('Flattened')
 
 IMG_INDEX = 150
-plt.imshow(train_images[IMG_INDEX], cmap=plt.cm.binary)
-plt.xlabel(class_names[train_labels[IMG_INDEX]])
-plt.show()
+# plt.imshow(train_images[IMG_INDEX], cmap=plt.cm.binary)
+# plt.xlabel(class_names[train_labels[IMG_INDEX]])
+# plt.show()
 
 """POOLING AND CONVOLUTION"""
 
 model = models.Sequential()
 # 32 is the amount of filters, (3, 3) is how large the filters are. the activation is what is being applied to the output of the matrix
 # input shape is what the program should expect (32 by 32, 3 colors [RGB])
-model.add(layers.Conv2D(32,(3,3), activation = 'relu', input_shape =(256,256,3)))
+model.add(layers.Conv2D(32,(3,3), activation = 'relu', input_shape =(256,256,3))) # Adding the 1 here to match inputs (?)
 
 # pooling will shrink the filter size by a factor of 2, with the stride length being 2
 model.add(layers.MaxPooling2D((2,2)))
@@ -96,7 +100,7 @@ model.compile(optimizer = 'adam',
 
 # the more epochs, the longer it takes
 # epoch is the same batch of data fed into a different order to make the model more familiar with features
-history = model.fit(train_images, train_labels, epochs=4, validation_data = (val_images, val_labels))
+history = model.fit(train_images, train_labels, epochs=4, validation_data = (val_images, val_labels), verbose=1)
 
 
 # MAKING THE MODEL OUTPUT PREDICTIONS
