@@ -31,7 +31,7 @@ from PIL import Image
 
 print('Starting to get dataset')
 
-width = 100
+width = 128
 
 instruments_data = tf.keras.utils.image_dataset_from_directory('/home/kaufmux/Documents/capstone/capstone-Bsharp-AI/music_instruments_images/Woodwind/', labels= 'inferred', batch_size=1, image_size=(width, width))
 
@@ -48,7 +48,7 @@ print('Done setting images and labels')
 
 train_images = np.array(train_images)
 train_labels = np.array(train_labels)
-train_images = np.resize(train_images, (7122, width, width, 3))
+train_images = np.resize(train_images, (train_images.shape[0], width, width, 3))
 print('Done setting images/labels as numpy arrays')
 print('ndim, shape, size: ', train_images.ndim, train_images.shape, train_images.size)
 
